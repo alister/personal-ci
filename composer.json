@@ -1,0 +1,24 @@
+{
+    "name": "alister/personalci-demo",
+    "description": "An example CI-style output",
+    "license": "CC-BY-SA-3.0",
+    "require": {
+        "rhumsaa/uuid": "2.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=3.7",
+        "squizlabs/php_codesniffer": ">=1.5.0RC2",
+        "pdepend/pdepend": "dev-master",
+        "phpmd/phpmd": "dev-master",
+        "sebastian/phpcpd": "dev-master",
+        "phploc/phploc": "dev-master",
+        "covex-nn/phpcb": "dev-fork",
+        "zetacomponents/console-tools": "dev-master as 1.9999",
+        "mockery/mockery": ">=0.8"
+    },
+    "autoload": {
+        "psr-0": {
+            "ProjectName": "src/"
+        }
+    }
+}

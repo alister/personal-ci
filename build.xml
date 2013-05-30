@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Personal-CI project" default="build">
+ <target name="build"
+   depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb"/>
+   <!-- ",phpdox" fails. Skip running it for now  -->
+ <target name="build-parallel"
+   depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
+
+ <target name="tools-parallel" description="Run tools in parallel">
+  <parallel threadCount="2">
+   <sequential>
+    <antcall target="pdepend"/>
+    <antcall target="phpmd-ci"/>
+   </sequential>
+   <antcall target="phpcpd"/>
+   <antcall target="phpcs-ci"/>  <!-- We also have 'phpcs', which you can run from the command line with 'ant phpcs' -->
+   <antcall target="phploc"/>
+   <!--antcall target="phpdox"/-->
+  </parallel>
+ </target>
+
+ <target name="clean" description="Cleanup build artifacts">
+  <delete dir="${basedir}/build/api"/>
+  <delete dir="${basedir}/build/code-browser"/>
+  <delete dir="${basedir}/build/coverage"/>
+  <delete dir="${basedir}/build/logs"/>
+  <delete dir="${basedir}/build/pdepend"/>
+  <delete dir="${basedir}/build/phpdox"/>
+ </target>
+
+ <target name="prepare" depends="clean" description="Prepare for build">
+  <mkdir dir="${basedir}/build/code-browser"/>
+  <mkdir dir="${basedir}/build/coverage"/>
+  <mkdir dir="${basedir}/build/logs"/>
+  <mkdir dir="${basedir}/build/pdepend"/>
+  <mkdir dir="${basedir}/build/api"/>
+  <touch file="${basedir}/build/api/.keep"/><!-- put something in there, since phpdox is a bit broken -->
+  <!--mkdir dir="${basedir}/build/phpdox"/-->
+ </target>
+
+  <target name="composer" description="Installing dependencies">
+    <exec executable="wget" failonerror="true">
+      <arg value="-nc" />
+      <arg value="http://getcomposer.org/composer.phar" />
+    </exec>
+    <exec executable="php" failonerror="true">
+      <arg value="composer.phar" />
+      <arg value="install" /><!-- Use the lockfile versions only, if it exists (fall back to .json) -->
+      <arg value="--dev" /><!-- includes mockery, for testing -->
+      <arg value="--prefer-dist" /><!-- download/cache a local .zip file for use -->
+      <arg value="--no-progress" />
+      <!--arg value="- -install-suggests" /-->
+      <!--arg value="- -optimize-autoloader" /   # We don't usually optimise till full deployment # -->
+    </exec>
+  </target>
+
+ <target name="lint" description="Perform syntax check of sourcecode files">
+  <apply executable="php" failonerror="true">
+   <arg value="-l" />
+
+   <fileset dir="${basedir}/">
+    <include name="**/*.php" />
+    <exclude name="vendor/" /><!-- Don't check in vendors/ - libraries are expected to be tested independently -->
+    <modified /><!-- Only checking modified files -->
+   </fileset>
+
+   <fileset dir="${basedir}/tests">
+    <include name="**/*.php" /><!-- also covered above, but listing specifically is OK -->
+    <modified />
+   </fileset>
+  </apply>
+ </target>
+
+ <target name="phploc" description="Measure project size using PHPLOC">
+  <exec executable="vendor/bin/phploc">
+   <arg value="--log-csv" />
+   <arg value="${basedir}/build/logs/phploc.csv" />
+   <arg path="${basedir}/src" />
+  </exec>
+ </target>
+
+ <target name="pdepend" description="Calculate software metrics using PHP_Depend">
+  <exec executable="vendor/bin/pdepend">
+   <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+   <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+   <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+   <arg path="${basedir}/src" />
+  </exec>
+ </target>
+
+ <!-- You can also run this from the command line - it has a textfile output -->
+ <target name="phpmd"
+         description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+  <exec executable="vendor/bin/phpmd">
+   <arg path="${basedir}/src" />
+   <arg value="text" />
+   <arg value="codesize,design,naming,unusedcode,controversial" />
+   <arg value="--reportfile" />
+   <arg value="${basedir}/build/phpmd.txt" />
+   <arg value="--suffixes" />
+   <arg value="php" />
+  </exec>
+ </target>
+
+ <!-- This is usually run - it outputs to an XML file  -->
+ <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+  <exec executable="vendor/bin/phpmd">
+   <arg path="${basedir}/src" />
+   <arg value="xml" />
+   <arg value="codesize,design,naming,unusedcode,controversial" />  <!-- maybe skip 'controversial'? -->
+   <arg value="--reportfile" />
+   <arg value="${basedir}/build/logs/pmd.xml" />
+   <arg value="--suffixes" />
+   <arg value="php" />
+  </exec>
+ </target>
+
+ <!-- This outputs to the screen, for quick viewing
+    Running 'phpcs -i src/' is even better with recent versions though.
+    You could add the "<arg value="-i"/>" here.
+  -->
+ <target name="phpcs"
+         description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.
+         The better way is just to run phpcs on the command line (with '-a ./path/', 'Run interactively')">
+  <exec executable="vendor/bin/phpcs">
+   <arg value="- -standard=PSR2" />  <!-- Another option is Zend, or your own (- via a filepath to rules) -->
+   <!--arg value="- -standard=${basedir}/vendor/phpunit/phpunit/build/PHPCS/ruleset.xml" /     Here's one for ourselves -->
+   <arg value="--extensions=php" />
+   <arg path="${basedir}/src" />
+   <arg path="${basedir}/tests" />
+  </exec>
+ </target>
+
+ <!-- This outputs to a file -->
+ <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+  <exec executable="vendor/bin/phpcs" output="/dev/null">
+   <arg value="--report=checkstyle" />
+   <arg value="- -standard=PSR2" />  <!-- You will want the same here as in the 'phpcs' section, just above -->
+   <!--arg value="- -standard=${basedir}/vendor/phpunit/phpunit/build/PHPCS/ruleset.xml" /-->
+   <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+   <arg value="--extensions=php" />
+   <arg path="${basedir}/src" />
+   <!--arg path="${basedir}/tests" /--> <!-- You could also check the tests for coding standards -->
+  </exec>
+ </target>
+
+ <target name="phpcpd" description="Find duplicate code using PHPCPD">
+  <exec executable="vendor/bin/phpcpd">
+   <arg value="--log-pmd" />
+   <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+   <arg path="${basedir}/src" />
+  </exec>
+ </target>
+
+ <target name="phpdox" description="Generate API documentation using phpDox">
+  <exec executable="phpdox"/><!-- uses phpdox.xml config file -->
+ </target>
+
+ <target name="phpunit" description="Run unit tests with PHPUnit">
+    <!-- uses phpunit.xml(.dist) config file, and local phpunit (pulled in by composer) -->
+  <exec executable="${basedir}/vendor/bin/phpunit" failonerror="false"/>
+ </target>
+
+ <!-- This pulls together the results of most of the other tools for a single place to look at it -->
+ <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+  <exec executable="vendor/bin/phpcb">
+   <arg value="--log" />
+   <arg path="${basedir}/build/logs" />
+   <arg value="--source" />
+   <arg path="${basedir}/src" />
+   <arg value="--output" />
+   <arg path="${basedir}/build/code-browser" />
+  </exec>
+ </target>
+</project>

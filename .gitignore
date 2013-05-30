@@ -1,0 +1,14 @@
+# build artifacts
+composer.phar
+build/
+vendor/
+# backups
+*.bak
+*~
+# Project files
+*.sublime-project
+*.sublime-workspace
+# Other files
+_blogpostExtras/
+#
+# add more as appropriate

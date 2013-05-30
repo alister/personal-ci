@@ -1,0 +1,79 @@
+<phpunit
+  bootstrap="./tests/bootstrap.php"
+  colors="false"
+  cacheTokens="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+
+  mapTestClassNameToCoveredClassName="false"
+  forceCoversAnnotation="false"
+  strict="false"
+>
+  <!--
+  forceCoversAnnotation:
+   forceCoversAnnotation="true"
+    http://www.phpunit.de/manual/current/en/appendixes.configuration.html#appendixes.configuration.phpunit
+
+    http://stackoverflow.com/questions/10520464/what-does-phpunit-strict-mode-do
+   strict="false"
+
+    This might slow testing down a bit... if we stopped for everything
+   stopOnError="true"
+   stopOnFailure="true"
+   stopOnIncomplete="true"
+  -->
+
+  <php>
+   <env name="APPLICATION_ENVIRONMENT" value="test"/>
+  </php>
+  <testsuites>
+    <testsuite name="ApplicationName">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <listeners>
+    <!-- close any expectations, report issues -->
+    <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+    <!-- if a test takes 'too long', raise an error -->
+    <listener file="./tests/Scripts/TestTimesListener.php" class="Application_Test_TestTimesListener" />
+  </listeners>
+
+  <filter>
+    <blacklist>
+      <!--file>./app/console</file-->  <!-- don't run the console app -->
+      <directory>./vendor/</directory>  <!-- suffix=".php" -->
+      <!--directory suffix=".php">/path/to/files</directory-->
+      <!--directory suffix=".php">../src/Aranea/CrawlBundle/</directory-->
+    </blacklist>
+
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./src</directory>
+      <directory suffix=".php">./application</directory>
+      <!--directory suffix=".php">tests</directory-->
+      <exclude>
+        <!--file>./app/console</file-->  <!-- don't run the console app -->
+        <!--directory suffix=".php">/path/to/files</directory-->
+      </exclude>
+    </whitelist>
+  </filter>
+
+  <logging>
+    <log type="coverage-html" target="./build/coverage"
+      title="DianaService" charset="UTF-8" yui="true" highlight="true"
+      lowUpperBound="35" highLowerBound="70"/>
+    <log type="coverage-clover" target="./build/logs/clover.xml"/>
+    <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
+  </logging>
+
+  <groups>
+    <include>
+      <!--group>only</group--><!-- when enabled, it should just run a very very small number of tests -->
+    </include>
+    <exclude>
+      <!-- group>proved</group --><!-- had just been put there to prove something -->
+      <!-- group>externalTest</group --><!-- talks to the outside world -->
+      <!-- group>livesite</group --><!-- talks to the main website -->
+    </exclude>
+  </groups>
+</phpunit>
