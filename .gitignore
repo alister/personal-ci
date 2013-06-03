@@ -1,6 +1,7 @@
 # build artifacts
 composer.phar
 build/
+cache.properties
 vendor/
 # backups
 *.bak
