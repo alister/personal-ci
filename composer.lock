@@ -199,12 +199,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phploc.git",
-                "reference": "23be5d5d9bc40577972eca24418b5bec6a938779"
+                "reference": "e7f2e3c5cfdbc940ea303f78fd606ed3f50fe5d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phploc/zipball/23be5d5d9bc40577972eca24418b5bec6a938779",
-                "reference": "23be5d5d9bc40577972eca24418b5bec6a938779",
+                "url": "https://api.github.com/repos/sebastianbergmann/phploc/zipball/e7f2e3c5cfdbc940ea303f78fd606ed3f50fe5d8",
+                "reference": "e7f2e3c5cfdbc940ea303f78fd606ed3f50fe5d8",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +212,6 @@
                 "sebastian/finder-facade": ">=1.1.0",
                 "sebastian/git": ">=1.0.0",
                 "sebastian/version": ">=1.0.0",
-                "symfony/finder": ">=2.1.2",
                 "zetacomponents/console-tools": "dev-master"
             },
             "bin": [
@@ -237,7 +236,7 @@
             ],
             "description": "A tool for quickly measuring the size of a PHP project.",
             "homepage": "https://github.com/sebastianbergmann/phploc",
-            "time": "2013-05-30 16:35:56"
+            "time": "2013-06-02 08:05:54"
         },
         {
             "name": "phpmd/phpmd",
