@@ -75,28 +75,12 @@
   <exec executable="vendor/bin/phploc">
    <arg value="--log-csv" />
    <arg value="${basedir}/build/logs/phploc.csv" />
+   <arg value="--log-xml" />
+   <arg value="${basedir}/build/logs/phploc.xml" />
    <arg value="--count-tests" />
-   <arg value="--no-interaction" />
-   <!-- Remove if you are not using git -->
-   <arg value="--git-repository" />
-   <arg value="${basedir}" />
-   <!-- Remove if you are not using jenkis ansi output plugin-->
-   <arg value="--ansi" />
    <arg path="${basedir}/src" />
   </exec>
  </target>
-<target name="phploc-xml" description="Measure project size using PHPLOC">
-        <exec executable="vendor/bin/phploc">
-            <arg value="--log-xml" />
-            <arg value="${basedir}/build/logs/phploc.xml" />
-            <arg value="--count-tests" />
-            <arg value="--no-interaction" />
-            <!-- Remove if you are not using git -->
-            <arg value="--git-repository" />
-            <arg value="${basedir}" />
-            <arg path="${basedir}/src" />
-        </exec>
-</target>
 
  <target name="pdepend" description="Calculate software metrics using PHP_Depend">
   <exec executable="vendor/bin/pdepend">
@@ -171,7 +155,7 @@
   </exec>
  </target>
 
- <target name="phpdox" description="Generate API documentation using phpDox" depends="phploc-xml">
+ <target name="phpdox" description="Generate API documentation using phpDox">
   <exec executable="vendor/bin/phpdox"/><!-- uses phpdox.xml config file -->
  </target>
 
