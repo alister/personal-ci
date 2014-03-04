@@ -81,6 +81,7 @@
    <arg value="--no-interaction" />
    <!-- Remove if you are not using git -->
    <arg value="--git-repository" />
+   <arg value="${basedir}" />
    <!-- Remove if you are not using jenkis ansi output plugin-->
    <arg value="--ansi" />
    <arg path="${basedir}/src" />
