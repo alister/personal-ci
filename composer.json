@@ -1,5 +1,5 @@
 {
-    "name": "alister/personalci-demo",
+    "name": "chebetos/personal-ci",
     "description": "An example CI-style output",
     "license": "CC-BY-SA-3.0",
     "require": {
