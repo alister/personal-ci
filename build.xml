@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Personal-CI project" default="build">
  <target name="build"
-   depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb"/>
+   depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb,phpdox"/>
    <!-- ",phpdox" fails. Skip running it for now  -->
  <target name="build-parallel"
    depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
@@ -15,7 +15,7 @@
    <antcall target="phpcpd"/>
    <antcall target="phpcs-ci"/>  <!-- We also have 'phpcs', which you can run from the command line with 'ant phpcs' -->
    <antcall target="phploc"/>
-   <!--antcall target="phpdox"/-->
+   <antcall target="phpdox" />
   </parallel>
  </target>
 
@@ -35,7 +35,7 @@
   <mkdir dir="${basedir}/build/pdepend"/>
   <mkdir dir="${basedir}/build/api"/>
   <touch file="${basedir}/build/api/.keep"/><!-- put something in there, since phpdox is a bit broken -->
-  <!--mkdir dir="${basedir}/build/phpdox"/-->
+  <mkdir dir="${basedir}/build/phpdox" />
  </target>
 
   <target name="composer" description="Installing dependencies">
@@ -123,7 +123,7 @@
          description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.
          The better way is just to run phpcs on the command line (with '-a ./path/', 'Run interactively')">
   <exec executable="vendor/bin/phpcs">
-   <arg value="- -standard=PSR2" />  <!-- Another option is Zend, or your own (- via a filepath to rules) -->
+   <arg value="--standard=PSR2" />  <!-- Another option is Zend, or your own (- via a filepath to rules) -->
    <!--arg value="- -standard=${basedir}/vendor/phpunit/phpunit/build/PHPCS/ruleset.xml" /     Here's one for ourselves -->
    <arg value="--extensions=php" />
    <arg path="${basedir}/src" />
@@ -135,7 +135,7 @@
  <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
   <exec executable="vendor/bin/phpcs" output="/dev/null">
    <arg value="--report=checkstyle" />
-   <arg value="- -standard=PSR2" />  <!-- You will want the same here as in the 'phpcs' section, just above -->
+   <arg value="--standard=PSR2" />  <!-- You will want the same here as in the 'phpcs' section, just above -->
    <!--arg value="- -standard=${basedir}/vendor/phpunit/phpunit/build/PHPCS/ruleset.xml" /-->
    <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
    <arg value="--extensions=php" />
