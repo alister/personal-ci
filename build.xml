@@ -156,6 +156,7 @@
  </target>
 
  <target name="phpdox" description="Generate API documentation using phpDox">
+  <copy file="${basedir}/build/logs/clover.xml" tofile="${basedir}/build/logs/coverage/index.xml" />
   <exec executable="vendor/bin/phpdox"/><!-- uses phpdox.xml config file -->
  </target>
 
