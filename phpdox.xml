@@ -16,7 +16,7 @@
                 <source type="pmd" />
                 <source type="phploc" />
                 <source type="phpunit">
-                    <coverage path="clover.xml" />
+                    <coverage file="clover.xml" />
                 </source>
             </enrich>
             <build engine="html" enabled="true" output="api"/>
