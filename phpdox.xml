@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpdox xmlns="http://phpdox.net/config">
-    <project name="name-of-project" source="${basedir}/src" workdir="${basedir}/build/phpdox">
+    <project name="personal-ci" source="${basedir}/src" workdir="${basedir}/build/phpdox">
         <collector publiconly="false">
             <include mask="*.php" />
             <exclude mask="*Autoload.php" />
@@ -15,7 +15,9 @@
                 <source type="checkstyle" />
                 <source type="pmd" />
                 <source type="phploc" />
-                <source type="phpunit" />
+                <source type="phpunit">
+                    <coverage path="clover.xml" />
+                </source>
             </enrich>
             <build engine="html" enabled="true" output="api"/>
         </generator>
