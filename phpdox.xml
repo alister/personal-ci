@@ -7,6 +7,16 @@
             <exclude mask="bootstrap.php" />
         </collector>
         <generator output="${basedir}/build">
+            <enrich base="${basedir}/build/logs">
+                <source type="build" />
+                <source type="git">
+                    <history enabled="true" limit="15" />
+                </source>
+                <source type="checkstyle" />
+                <source type="pmd" />
+                <source type="phploc" />
+                <source type="phpunit" />
+            </enrich>
             <build engine="html" enabled="true" output="api"/>
         </generator>
     </project>
