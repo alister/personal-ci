@@ -6,16 +6,16 @@
         "rhumsaa/uuid": "2.*"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=3.7",
-        "squizlabs/php_codesniffer": ">=1.5.0RC2",
-        "pdepend/pdepend": "dev-master",
-        "phpmd/phpmd": "dev-master",
-        "sebastian/phpcpd": "dev-master",
-        "phploc/phploc": "dev-master",
-        "covex-nn/phpcb": "dev-fork",
-        "zetacomponents/console-tools": "dev-master as 1.9999",
-        "mockery/mockery": ">=0.8",
-        "theseer/phpdox": "dev-master"
+        "phpunit/phpunit": "@stable",
+        "squizlabs/php_codesniffer": "@stable",
+        "pdepend/pdepend": "@stable",
+        "phpmd/phpmd": "@stable",
+        "sebastian/phpcpd": "@stable",
+        "phploc/phploc": "@stable",
+        "covex-nn/phpcb": "@stable",
+        "zetacomponents/console-tools": "@stable",
+        "mockery/mockery": "@stable",
+        "theseer/phpdox": "@stable"
     },
     "autoload": {
         "psr-0": {
