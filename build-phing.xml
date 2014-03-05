@@ -67,11 +67,12 @@
                 <exclude name="vendor/"/>
                 <!-- Don't check in vendors/ - libraries are expected to be tested independently -->
             </fileset>
-
+            <!--
+            also covered above, but listing specifically is OK
             <fileset dir="${basedir}/tests">
                 <include name="**/*.php"/>
-                <!-- also covered above, but listing specifically is OK -->
             </fileset>
+            -->
         </phplint>
     </target>
 
