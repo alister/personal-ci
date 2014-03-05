@@ -71,7 +71,6 @@
             <fileset dir="${basedir}/tests">
                 <include name="**/*.php"/>
                 <!-- also covered above, but listing specifically is OK -->
-                <modified/>
             </fileset>
         </phplint>
     </target>
