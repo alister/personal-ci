@@ -131,8 +131,8 @@
     <target name="phpcs"
             description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.
          The better way is just to run phpcs on the command line (with '-a ./path/', 'Run interactively')">
-        <phpcodesniffer standard="PSR2" encoding="UTF-8" tabWidth="4" haltonerror="true" haltonwarning="false">
-        <!-- On strict builds may be haltonwarning=true -->
+        <phpcodesniffer standard="PSR2" encoding="UTF-8" tabWidth="4" haltonerror="false" haltonwarning="false">
+        <!-- On strict builds may be haltonerror haltonwarning=true -->
             <fileset dir="src">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
