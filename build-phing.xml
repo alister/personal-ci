@@ -62,7 +62,7 @@
     <target name="lint" description="Perform syntax check of sourcecode files">
         <phplint haltonfailure="true" deprecatedAsError="false">
             <!-- set deprecatedAsError to true on strict builds -->
-            <fileset dir="">
+            <fileset dir=".">
                 <include name="**/*.php"/>
                 <exclude name="vendor/"/>
                 <!-- Don't check in vendors/ - libraries are expected to be tested independently -->
