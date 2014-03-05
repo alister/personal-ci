@@ -155,6 +155,12 @@
     </target>
 
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
+        <exec executable="vendor/bin/phpcpd">
+            <arg value="--log-pmd" />
+            <arg value="build/logs/pmd-cpd.xml" />
+            <arg path="$src" />
+        </exec>
+        <!--
         <phpcpd>
             <formatter type="pmd" outfile="build/logs/pmd-cpd.xml"/>
             <fileset dir="src">
@@ -166,6 +172,7 @@
                 <include name="*.php"/>
             </fileset>
         </phpcpd>
+        -->
     </target>
 
     <target name="phpdox" description="Generate API documentation using phpDox">
