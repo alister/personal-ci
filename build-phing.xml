@@ -182,7 +182,7 @@
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <!-- uses phpunit.xml(.dist) config file, and local phpunit (pulled in by composer) -->
-        <exec executable="${basedir}/vendor/bin/phpunit" checkreturn="false"/>
+        <exec executable="vendor/bin/phpunit" checkreturn="false" />
         <!-- <phpunit configuration="phpunit.xml" /> -->
     </target>
 
