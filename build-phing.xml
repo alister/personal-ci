@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Personal-CI project" default="build">
+    <php expression="include('vendor/autoload.php')"/>
     <target name="build"
             depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb,phpdox"/>
     <!-- ",phpdox" fails. Skip running it for now  -->
