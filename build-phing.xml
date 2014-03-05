@@ -21,23 +21,23 @@
     </target>
 
     <target name="clean" description="Cleanup build artifacts">
-        <delete dir="${basedir}/build/api"/>
-        <delete dir="${basedir}/build/code-browser"/>
-        <delete dir="${basedir}/build/coverage"/>
-        <delete dir="${basedir}/build/logs"/>
-        <delete dir="${basedir}/build/pdepend"/>
-        <delete dir="${basedir}/build/phpdox"/>
+        <delete dir="build/api"/>
+        <delete dir="build/code-browser"/>
+        <delete dir="build/coverage"/>
+        <delete dir="build/logs"/>
+        <delete dir="build/pdepend"/>
+        <delete dir="build/phpdox"/>
     </target>
 
     <target name="prepare" depends="clean" description="Prepare for build">
-        <mkdir dir="${basedir}/build/code-browser"/>
-        <mkdir dir="${basedir}/build/coverage"/>
-        <mkdir dir="${basedir}/build/logs"/>
-        <mkdir dir="${basedir}/build/pdepend"/>
-        <mkdir dir="${basedir}/build/api"/>
-        <touch file="${basedir}/build/api/.keep"/>
+        <mkdir dir="build/code-browser"/>
+        <mkdir dir="build/coverage"/>
+        <mkdir dir="build/logs"/>
+        <mkdir dir="build/pdepend"/>
+        <mkdir dir="build/api"/>
+        <touch file="build/api/.keep"/>
         <!-- put something in there, since phpdox is a bit broken -->
-        <mkdir dir="${basedir}/build/phpdox"/>
+        <mkdir dir="build/phpdox"/>
     </target>
 
     <target name="composer" description="Installing dependencies">
@@ -62,14 +62,14 @@
     <target name="lint" description="Perform syntax check of sourcecode files">
         <phplint haltonfailure="true" deprecatedAsError="false">
             <!-- set deprecatedAsError to true on strict builds -->
-            <fileset dir="${basedir}/">
+            <fileset dir="">
                 <include name="**/*.php"/>
                 <exclude name="vendor/"/>
                 <!-- Don't check in vendors/ - libraries are expected to be tested independently -->
             </fileset>
             <!--
             also covered above, but listing specifically is OK
-            <fileset dir="${basedir}/tests">
+            <fileset dir="tests">
                 <include name="**/*.php"/>
             </fileset>
             -->
@@ -77,12 +77,12 @@
     </target>
 
     <target name="phploc" description="Measure project size using PHPLOC">
-        <phploc countTests="true" reportDirectory="${basedir}/build/logs/" reportName="phploc" reportType="csv">
-            <fileset dir="${basedir}/src">
+        <phploc countTests="true" reportDirectory="build/logs/" reportName="phploc" reportType="csv">
+            <fileset dir="src">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
-            <fileset dir="${basedir}/tests">
+            <fileset dir="tests">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
@@ -91,15 +91,15 @@
 
     <target name="pdepend" description="Calculate software metrics using PHP_Depend">
         <phpdepend haltonerror="true">
-            <fileset dir="${basedir}/src">
+            <fileset dir="src">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
             <analyzer type="coderank-mode" value="method" />
-            <logger type="jdepend-xml" outfile="${basedir}/build/logs/jdepend.xml"/>
-            <logger type="summary-xml" outfile="${basedir}/build/pdepend/pdepend-summary.xml"/>
-            <logger type="jdepend-chart" outfile="${basedir}/build/pdepend/dependencies.svg"/>
-            <logger type="overview-pyramid" outfile="${basedir}/build/pdepend/overview-pyramid.svg"/>
+            <logger type="jdepend-xml" outfile="build/logs/jdepend.xml"/>
+            <logger type="summary-xml" outfile="build/pdepend/pdepend-summary.xml"/>
+            <logger type="jdepend-chart" outfile="build/pdepend/dependencies.svg"/>
+            <logger type="overview-pyramid" outfile="build/pdepend/overview-pyramid.svg"/>
         </phpdepend>
     </target>
 
@@ -107,13 +107,13 @@
     <target name="phpmd"
             description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing. But create a log file for the continuous integration server too.">
         <phpmd rulesets="codesize,design,naming,unusedcode,controversial">
-            <fileset dir="${basedir}/src">
+            <fileset dir="src">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
-            <formatter type="text" outfile="${basedir}/build/phpmd.txt" />
-            <formatter type="xml" outfile="${basedir}/build/logs/pmd.xml" />
-            <formatter type="html" outfile="${basedir}/build/phpmd.html" />
+            <formatter type="text" outfile="build/phpmd.txt" />
+            <formatter type="xml" outfile="build/logs/pmd.xml" />
+            <formatter type="html" outfile="build/phpmd.html" />
         </phpmd>
     </target>
 
@@ -133,17 +133,17 @@
          The better way is just to run phpcs on the command line (with '-a ./path/', 'Run interactively')">
         <phpcodesniffer standard="PSR2" encoding="UTF-8" tabWidth="4" haltonerror="true" haltonwarning="false">
         <!-- On strict builds may be haltonwarning=true -->
-            <fileset dir="${basedir}/src">
+            <fileset dir="src">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
-            <fileset dir="${basedir}/tests">
+            <fileset dir="tests">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
-            <formatter type="checkstyle" outfile="${basedir}/build/logs/checkstyle.xml"/>
-            <formatter type="full" outfile="${basedir}/build/checkstyle.txt"/>
-            <formatter type="gitblame" outfile="${basedir}/build/checkstyle-blame.txt"/>
+            <formatter type="checkstyle" outfile="build/logs/checkstyle.xml"/>
+            <formatter type="full" outfile="build/checkstyle.txt"/>
+            <formatter type="gitblame" outfile="build/checkstyle-blame.txt"/>
         </phpcodesniffer>
     </target>
 
@@ -155,12 +155,12 @@
 
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
         <phpcpd>
-            <formatter type="pmd" outfile="${basedir}/build/logs/pmd-cpd.xml"/>
-            <fileset dir="${basedir}/src">
+            <formatter type="pmd" outfile="build/logs/pmd-cpd.xml"/>
+            <fileset dir="src">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
-            <fileset dir="${basedir}/tests">
+            <fileset dir="tests">
                 <include name="**/*.php"/>
                 <include name="*.php"/>
             </fileset>
@@ -168,14 +168,14 @@
     </target>
 
     <target name="phpdox" description="Generate API documentation using phpDox">
-        <copy file="${basedir}/build/logs/clover.xml" tofile="${basedir}/build/logs/coverage/index.xml"/>
+        <copy file="build/logs/clover.xml" tofile="build/logs/coverage/index.xml"/>
         <exec executable="vendor/bin/phpdox"/>
         <!-- uses phpdox.xml config file -->
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <!-- uses phpunit.xml(.dist) config file, and local phpunit (pulled in by composer) -->
-        <phpunit configuration="${basedir}/phpunit.xml">
+        <phpunit configuration="phpunit.xml">
 
         </phpunit>
     </target>
@@ -184,11 +184,11 @@
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="vendor/bin/phpcb">
             <arg value="--log"/>
-            <arg path="${basedir}/build/logs"/>
+            <arg path="build/logs"/>
             <arg value="--source"/>
-            <arg path="${basedir}/src"/>
+            <arg path="src"/>
             <arg value="--output"/>
-            <arg path="${basedir}/build/code-browser"/>
+            <arg path="build/code-browser"/>
         </exec>
     </target>
 </project>
