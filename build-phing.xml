@@ -41,11 +41,11 @@
     </target>
 
     <target name="composer" description="Installing dependencies">
-        <exec executable="wget" failonerror="true">
+        <exec executable="wget" checkreturn="true">
             <arg value="-nc"/>
             <arg value="http://getcomposer.org/composer.phar"/>
         </exec>
-        <exec executable="php" failonerror="true">
+        <exec executable="php" checkreturn="true">
             <arg value="composer.phar"/>
             <arg value="install"/>
             <!-- Use the lockfile versions only, if it exists (fall back to .json) -->
