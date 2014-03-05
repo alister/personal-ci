@@ -6,6 +6,7 @@
         "rhumsaa/uuid": "2.*"
     },
     "require-dev": {
+        "phing/phing": "@stable",
         "phpunit/phpunit": "@stable",
         "squizlabs/php_codesniffer": "@stable",
         "pdepend/pdepend": "@stable",
