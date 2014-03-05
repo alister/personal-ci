@@ -182,9 +182,8 @@
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <!-- uses phpunit.xml(.dist) config file, and local phpunit (pulled in by composer) -->
-        <phpunit configuration="phpunit.xml">
-
-        </phpunit>
+        <exec executable="${basedir}/vendor/bin/phpunit" checkreturn="false"/>
+        <!-- <phpunit configuration="phpunit.xml" /> -->
     </target>
 
     <!-- This pulls together the results of most of the other tools for a single place to look at it -->
