@@ -66,8 +66,6 @@
                 <include name="**/*.php"/>
                 <exclude name="vendor/"/>
                 <!-- Don't check in vendors/ - libraries are expected to be tested independently -->
-                <modified/>
-                <!-- Only checking modified files -->
             </fileset>
 
             <fileset dir="${basedir}/tests">
