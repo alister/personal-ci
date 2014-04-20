@@ -2,7 +2,6 @@
 <project name="Personal-CI project" default="build">
  <target name="build"
    depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb,phpdox"/>
-   <!-- ",phpdox" fails. Skip running it for now  -->
  <target name="build-parallel"
    depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
@@ -20,12 +19,12 @@
  </target>
 
  <target name="clean" description="Cleanup build artifacts">
-  <delete dir="${basedir}/build/api"/>
   <delete dir="${basedir}/build/code-browser"/>
   <delete dir="${basedir}/build/coverage"/>
   <delete dir="${basedir}/build/logs"/>
   <delete dir="${basedir}/build/pdepend"/>
-  <delete dir="${basedir}/build/phpdox"/>
+  <!-- <delete dir="${basedir}/build/phpdox"/>
+  <delete dir="${basedir}/build/docs"/> -->
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
@@ -33,9 +32,8 @@
   <mkdir dir="${basedir}/build/coverage"/>
   <mkdir dir="${basedir}/build/logs"/>
   <mkdir dir="${basedir}/build/pdepend"/>
-  <mkdir dir="${basedir}/build/api"/>
-  <touch file="${basedir}/build/api/.keep"/><!-- put something in there, since phpdox is a bit broken -->
   <mkdir dir="${basedir}/build/phpdox" />
+  <touch file="${basedir}/build/phpdox/.keep"/><!-- put something in there, since phpdox is a bit broken -->
  </target>
 
   <target name="composer" description="Installing dependencies">
@@ -71,7 +69,7 @@
   </apply>
  </target>
 
- <target name="phploc" description="Measure project size using PHPLOC">
+ <target name="phploc" description="Measure project size using PHPLOC" depends="prepare">
   <exec executable="vendor/bin/phploc">
    <arg value="--log-csv" />
    <arg value="${basedir}/build/logs/phploc.csv" />
@@ -82,7 +80,7 @@
   </exec>
  </target>
 
- <target name="pdepend" description="Calculate software metrics using PHP_Depend">
+ <target name="pdepend" description="Calculate software metrics using PHP_Depend" depends="prepare">
   <exec executable="vendor/bin/pdepend">
    <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
    <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
@@ -93,7 +91,8 @@
 
  <!-- You can also run this from the command line - it has a textfile output -->
  <target name="phpmd"
-         description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+        description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing."
+        depends="prepare">
   <exec executable="vendor/bin/phpmd">
    <arg path="${basedir}/src" />
    <arg value="text" />
@@ -102,11 +101,15 @@
    <arg value="${basedir}/build/phpmd.txt" />
    <arg value="--suffixes" />
    <arg value="php" />
+   <arg value="--exclude" />
+   <arg value="logs" />
   </exec>
  </target>
 
  <!-- This is usually run - it outputs to an XML file  -->
- <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+ <target name="phpmd-ci" 
+        description="Perform project mess detection using PHPMD creating a log file for the continuous integration server"
+        depends="prepare">
   <exec executable="vendor/bin/phpmd">
    <arg path="${basedir}/src" />
    <arg value="xml" />
@@ -115,6 +118,8 @@
    <arg value="${basedir}/build/logs/pmd.xml" />
    <arg value="--suffixes" />
    <arg value="php" />
+   <arg value="--exclude" />
+   <arg value="logs" />
   </exec>
  </target>
 
@@ -123,10 +128,13 @@
     You could add the "<arg value="-i"/>" here.
   -->
  <target name="phpcs"
-         description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.
-         The better way is just to run phpcs on the command line (with '-a ./path/', 'Run interactively')">
+        description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.
+        The better way is just to run phpcs on the command line (with '-a ./path/', 'Run interactively')"
+        depends="prepare">
   <exec executable="vendor/bin/phpcs">
-   <arg value="--standard=PSR2" />  <!-- Another option is Zend, or your own (- via a filepath to rules) -->
+   <arg value="-v" />
+   <arg value="--report=checkstyle" />
+   <arg value="--standard=${basedir}/phpcs-ruleset.xml" />  <!-- Another option is Zend, or your own (- via a filepath to rules) -->
    <!--arg value="- -standard=${basedir}/vendor/phpunit/phpunit/build/PHPCS/ruleset.xml" /     Here's one for ourselves -->
    <arg value="--extensions=php" />
    <arg path="${basedir}/src" />
@@ -135,10 +143,13 @@
  </target>
 
  <!-- This outputs to a file -->
- <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+ <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server"
+        depends="prepare">
   <exec executable="vendor/bin/phpcs" output="/dev/null">
+   <arg value="-v" />
+   <arg value="-v" />
    <arg value="--report=checkstyle" />
-   <arg value="--standard=PSR2" />  <!-- You will want the same here as in the 'phpcs' section, just above -->
+   <arg value="--standard=${basedir}/phpcs-ruleset.xml" />  <!-- You will want the same here as in the 'phpcs' section, just above -->
    <!--arg value="- -standard=${basedir}/vendor/phpunit/phpunit/build/PHPCS/ruleset.xml" /-->
    <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
    <arg value="--extensions=php" />
@@ -147,7 +158,8 @@
   </exec>
  </target>
 
- <target name="phpcpd" description="Find duplicate code using PHPCPD">
+
+ <target name="phpcpd" description="Find duplicate code using PHPCPD" depends="prepare">
   <exec executable="vendor/bin/phpcpd">
    <arg value="--log-pmd" />
    <arg value="${basedir}/build/logs/pmd-cpd.xml" />
@@ -155,18 +167,17 @@
   </exec>
  </target>
 
- <target name="phpdox" description="Generate API documentation using phpDox">
-  <copy file="${basedir}/build/logs/clover.xml" tofile="${basedir}/build/logs/coverage/index.xml" />
+ <target name="phpdox" description="Generate API documentation using phpDox" depends="phpunit,phpcs-ci,phpmd-ci,phploc">
   <exec executable="vendor/bin/phpdox"/><!-- uses phpdox.xml config file -->
  </target>
 
- <target name="phpunit" description="Run unit tests with PHPUnit">
+ <target name="phpunit" description="Run unit tests with PHPUnit" depends="prepare">
     <!-- uses phpunit.xml(.dist) config file, and local phpunit (pulled in by composer) -->
   <exec executable="${basedir}/vendor/bin/phpunit" failonerror="false"/>
  </target>
 
  <!-- This pulls together the results of most of the other tools for a single place to look at it -->
- <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+ <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser" depends="prepare">
   <exec executable="vendor/bin/phpcb">
    <arg value="--log" />
    <arg path="${basedir}/build/logs" />

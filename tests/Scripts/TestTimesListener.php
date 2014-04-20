@@ -43,4 +43,17 @@ class PHPUnitTestListener implements PHPUnit_Framework_TestListener
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
     }
+
+    /**
+     * addRiskyTest was added in PHPUnit 4.0.0
+     * 
+     * @param PHPUnit_Framework_Test $test
+     * @param Exception              $e
+     * @param float                  $time
+     * 
+     * @see PHPUnit_Framework_BaseTestListener 
+     */
+    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+    }
 }

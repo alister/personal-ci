@@ -1,25 +1,66 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpdox xmlns="http://phpdox.net/config">
-    <project name="personal-ci" source="${basedir}/src" workdir="${basedir}/build/phpdox">
-        <collector publiconly="false">
+    <!--  @silent: true | false to enable or disable visual output of progress -->
+
+    <!-- Additional bootstrap files to load for additional parsers and/or engines -->
+    <!-- Place as many require nodes as you feel like in this container -->
+    <!-- syntax: <require file="/path/to/file.php" /> -->
+    <bootstrap />
+
+    <!-- A phpDox project to process, you can have multiple projects in one config file -->
+    <project name="personal-ci" source="${basedir}/src" workdir="${basedir}/build/phpdox/xml">
+
+        <!--  Additional configuration for the collecting process (parse of php code, generation of xml data) -->
+        <collector publiconly="false" backend="parser">
+            <!--  <include / exclude filter for filelist generator, mask must follow fnmatch() requirements  -->
             <include mask="*.php" />
+            <!-- <exclude mask="" /> -->
+
             <exclude mask="*Autoload.php" />
             <exclude mask="bootstrap.php" />
+            <exclude mask="vendor/" />
+            <exclude mask="web/app*.php" />
+
+            <!--  How to handle inheritance -->
+            <inheritance resolve="true">
+                <!--  @resolve - Flag to enable/disable resolving of inheritance -->
+
+                <!--  You can define multiple (external) dependencies to be included -->
+                <!--  <dependency  path="" -->
+                <!--    @path  - path to a directory containing an index.xml for a dependency project -->
+            </inheritance>
+
         </collector>
-        <generator output="${basedir}/build">
+
+        <!--  Configuration of generation process -->
+        <generator output="${basedir}/build/phpdox">
+
             <enrich base="${basedir}/build/logs">
                 <source type="build" />
-                <source type="git">
-                    <history enabled="true" limit="15" />
-                </source>
-                <source type="checkstyle" />
-                <source type="pmd" />
                 <source type="phploc" />
+                <source type="git">
+                    <history enabled="true" limit="15" cache="${phpDox.project.workdir}/gitlog.xml" />
+                </source>
+                <source type="checkstyle">
+                    <file name="${basedir}/checkstyle.xml" />
+                </source> 
+                <source type="pmd">
+                    <file name="${basedir}/pmd.xml" />
+                </source>
+                <!-- <source type="clover">     not supported
+                    <file name="${basedir}/clover.xml" />
+                </source> -->
                 <source type="phpunit">
-                    <coverage path="coverage" />
+                    <coverage path="${basedir}/coverage/xml" />
                 </source>
             </enrich>
-            <build engine="html" enabled="true" output="api"/>
+
+            <build engine="html" enabled="true" output="api">
+                <file extension="html" />
+            </build>
+            <build engine="xml" enabled="true" output="xml" />
+
         </generator>
+
     </project>
 </phpdox>

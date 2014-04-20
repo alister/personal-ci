@@ -1,3 +1,6 @@
+<!-- This version of phpunit.xml will also do full code coverage 
+    See also: phpunit-nocoverage.xml
+-->
 <phpunit
   bootstrap="./tests/bootstrap.php"
   colors="false"
@@ -25,6 +28,7 @@
   -->
 
   <php>
+   <env name="APPENV" value="test"/>
    <env name="APPLICATION_ENVIRONMENT" value="test"/>
   </php>
   <testsuites>
@@ -60,10 +64,11 @@
 
   <logging>
     <log type="coverage-html" target="./build/coverage"
-      title="DianaService" charset="UTF-8" yui="true" highlight="true"
+      title="testExample" charset="UTF-8" yui="true" highlight="true"
       lowUpperBound="35" highLowerBound="70"/>
     <log type="coverage-clover" target="./build/logs/clover.xml"/>
-    <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
+    <log type="coverage-xml" target="./build/logs/coverage/xml"/>
+    <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="true"/>
   </logging>
 
   <groups>

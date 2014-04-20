@@ -1,5 +1,5 @@
 {
-    "name": "chebetos/personal-ci",
+    "name": "alister/personal-ci",
     "description": "An example CI-style output",
     "license": "CC-BY-SA-3.0",
     "require": {
@@ -16,7 +16,7 @@
         "covex-nn/phpcb": "@stable",
         "zetacomponents/console-tools": "@stable",
         "mockery/mockery": "@stable",
-        "theseer/phpdox": "@stable"
+        "theseer/phpdox": "dev-master#c3ef60fadac74f3aa80dc5cfffe64c6353bdd1f7"
     },
     "autoload": {
         "psr-0": {

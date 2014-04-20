@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<ruleset name="Extended Standard">
+
+ <!--
+    The name attribute of the ruleset tag is displayed
+    when running PHP_CodeSniffer with the -v command line
+    argument. The description tag below is not displayed anywhere
+    except in this file, so it can contain information for
+    developers who may change this file in the future.
+ -->
+ <description>Extended coding standard</description>
+
+ <!--
+    Include all sniffs in the PEAR standard. Note that the
+    path to the standard does not have to be specified as the
+    PEAR standard exists inside the PHP_CodeSniffer install
+    directory.
+ -->
+ <rule ref="PSR2"/>  <!-- includes PSR1 -->
+
+
+ <!--
+    Include some specific sniffs from the Generic standard.
+    Note again that the name of the sniff is the code that
+    PHP_CodeSniffer gives it.
+ -->
+ <rule ref="Generic.Commenting.Fixme"/>
+ <rule ref="Generic.Commenting.Todo"/>
+ <rule ref="Generic.ControlStructures.InlineControlStructure"/>
+ <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+ <rule ref="Squiz.PHP.CommentedOutCode"/>
+
+ <!--
+    Include all sniffs in an external standard directory. Note
+    that we have to specify the full path to the standard's
+    directory because it does not exist inside the PHP_CodeSniffer
+    install directory.
+ -->
+ <!--rule ref="/home/username/standards/mystandard"/-->
+
+ <!--
+    Include everything in another ruleset.xml file. This is
+    really handy if you want to customise another developer's
+    custom standard. They just need to distribute their single
+    ruleset file to allow this.
+ -->
+ <!--rule ref="/home/username/standards/custom.xml"/-->
+
+ <!--
+    Relative paths can also be used everywhere absolute paths are used.
+    Make sure the reference starts with ./ or ../ so PHP_CodeSniffer
+    knows it is a relative path.
+ -->
+ <!--rule ref="./standards/mystandard"/-->
+ <!--rule ref="../username/custom.xml"/-->
+
+ <!--
+    Include all sniffs in the Squiz standard except one. Note that
+    the name of the sniff being excluded is the code that the sniff
+    is given by PHP_CodeSniffer and is based on the file name and
+    path of the sniff class. You can display these codes using the
+    -s command line argument when checking a file.
+ -->
+ <!--rule ref="Squiz">
+  <exclude name="Squiz.PHP.CommentedOutCode"/>
+ </rule-->
+
+ <!--
+    You can also exclude a single sniff message.
+ -->
+ <!--rule ref="Squiz">
+  <exclude name="Squiz.Strings.DoubleQuoteUsage.ContainsVar"/>
+ </rule-->
+
+ <!--
+    Or, you can exclude a whole category of sniffs.
+ -->
+ <!--rule ref="Squiz">
+  <exclude name="Squiz.PHP"/>
+ </rule-->
+
+<!--
+    You can even exclude a whole standard. This example includes
+    all sniffs from the Squiz standard, but excludes any that come
+    from the Generic standard.
+ -->
+ <!--rule ref="Squiz">
+  <exclude name="Generic"/>
+ </rule-->
+
+ <!--
+    Here we are including a specific sniff but also changing
+    the error message of a specific message inside the sniff.
+    Note that the specific code for the message, which is
+    CommentFound in this case, is defined by the sniff developer.
+    You can display these codes by using the -s command line
+    argument when checking a file.
+
+    Also note that this message has a variable inside it,
+    which is why it is important that sniffs use a printf style
+    format for their error messages.
+
+    We also drop the severity of this message from the
+    default value (5) so that it is hidden by default. It can be
+    displayed by setting the minimum severity on the PHP_CodeSniffer
+    command line. This is great if you want to use some messages
+    only in code reviews and not have them block code commits.
+ -->
+ <rule ref="Generic.Commenting.Todo.CommentFound">
+  <message>Please review this TODO comment: %s</message>
+  <severity>3</severity>
+ </rule>
+
+ <!--
+    You can also change the type of a message from error to
+    warning and vice versa.
+ -->
+ <rule ref="Generic.Commenting.Todo.CommentFound">
+  <type>error</type>
+ </rule>
+ <rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+  <type>warning</type>
+ </rule>
+
+</ruleset>
