@@ -5,16 +5,23 @@ class Example
 {
     private $variable;
 
-    function getVariable()
+    public function getVariable()
     {
+        $unused = true;
         return $this->variable;
     }
 
-    function setVariable($newValue)
+    public function setVariable($newValue)
     {
         return $this->variable = $newValue;
     }
 
+    /**
+     * isVariableSet description
+     * 
+     * @return boolean [description]
+     * @todo  a note for the future
+     */
     function isVariableSet()
     {
         return isset($this->variable);
