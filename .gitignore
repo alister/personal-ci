@@ -1,5 +1,7 @@
 # build artifacts
 composer.phar
+# always let them build their own latest
+composer.lock
 build/
 cache.properties
 vendor/
@@ -13,3 +15,5 @@ vendor/
 _blogpostExtras/
 #
 # add more as appropriate
+#   Doc generator, https://github.com/fabpot/Sami
+.sami-cache/

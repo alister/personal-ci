@@ -16,6 +16,7 @@
         "covex-nn/phpcb": "@stable",
         "zetacomponents/console-tools": "@stable",
         "mockery/mockery": "@stable",
+        "sami/sami": "~1.3",
         "theseer/phpdox": "dev-master#c3ef60fadac74f3aa80dc5cfffe64c6353bdd1f7"
     },
     "autoload": {

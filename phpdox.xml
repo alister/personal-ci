@@ -44,10 +44,10 @@
                 <source type="checkstyle">
                     <file name="${basedir}/checkstyle.xml" />
                 </source> 
-                <source type="pmd">
+                <!-- <source type="pmd">    - the info is duplicated with this here
                     <file name="${basedir}/pmd.xml" />
-                </source>
-                <!-- <source type="clover">     not supported
+                </source> -->
+                <!-- <source type="clover"> - not supported
                     <file name="${basedir}/clover.xml" />
                 </source> -->
                 <source type="phpunit">

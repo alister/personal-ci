@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Personal-CI project" default="build">
  <target name="build"
-   depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb,phpdox"/>
+   depends="prepare,composer,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb,phpdox,sami"/>
  <target name="build-parallel"
    depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
@@ -15,6 +15,7 @@
    <antcall target="phpcs-ci"/>  <!-- We also have 'phpcs', which you can run from the command line with 'ant phpcs' -->
    <antcall target="phploc"/>
    <antcall target="phpdox" />
+   <antcall target="sami" />
   </parallel>
  </target>
 
@@ -59,6 +60,7 @@
    <fileset dir="${basedir}/">
     <include name="**/*.php" />
     <exclude name="vendor/" /><!-- Don't check in vendors/ - libraries are expected to be tested independently -->
+    <exclude name=".sami-cache/" />
     <modified /><!-- Only checking modified files -->
    </fileset>
 
@@ -169,6 +171,14 @@
 
  <target name="phpdox" description="Generate API documentation using phpDox" depends="phpunit,phpcs-ci,phpmd-ci,phploc">
   <exec executable="vendor/bin/phpdox"/><!-- uses phpdox.xml config file -->
+ </target>
+
+ <!-- generate api documentation using sami -->
+ <target name="sami">
+    <!-- <echo>Invoking bundled sami: ${basedir}/vendor/bin/sami.php</echo> -->
+    <exec executable="php">
+        <arg line="vendor/bin/sami.php --no-interaction update ./sami.php --force"/>
+    </exec>
  </target>
 
  <target name="phpunit" description="Run unit tests with PHPUnit" depends="prepare">
